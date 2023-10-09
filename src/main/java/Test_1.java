@@ -29,25 +29,28 @@ public class Test_1 {
 
     @Test(priority = 2)
     public void goToCategoryPage() {
-        WebElement categoryLink = driver.findElement(By.xpath("//a[.='Outlet']"));
+        WebElement categoryLink = driver.findElement(By.xpath("//a[@href='https://www.lcwaikiki.com/tr-TR/TR/lp/32-33-kadin']"));
         categoryLink.click();
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.urlToBe("https://www.lcwaikiki.com/tr-TR/TR/katalog/outlet"));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='product-list']")));
+        wait.until(ExpectedConditions.urlToBe("https://www.lcwaikiki.com/tr-TR/TR/lp/32-33-kadin"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@class='section5l flexcontainer']//img[@alt='SWEATSHIRT VE EŞOFMAN']")));
+        WebElement categorypage = driver.findElement(By.xpath("//article[@class='section5l flexcontainer']//img[@alt='SWEATSHIRT VE EŞOFMAN']"));
+        categorypage.click();
 
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/katalog/outlet");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/etiket/kadin-sweatshirt-esofmanalti");
 
     }
 
     @Test(priority = 3)
     public void goToProductPage() {
-        WebElement productLink = driver.findElement(By.xpath("//img[@src='https://img-lcwaikiki.mncdn.com/mnresize/600/800/pim/productimages/20212/5640361/l_20212-w1ks05z8-hkl_a.jpg']"));
-        productLink.click();
-        WebDriverWait wait = new WebDriverWait(driver, 20);
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='size-pop-up hidden-mobile']//a[.='XL']")));
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@id='pd_add_to_cart']")));
 
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/urun/outlet/Markalar/kadin/Tayt/5640361/2261621");
+        WebElement productLink = driver.findElement(By.xpath("//img[@src='https://img-lcwaikiki.mncdn.com/mnresize/600/800/pim/productimages/20232/6674752/v1/l_20232-w3cp90z8-lgs-78-61-89-180_a.jpg']"));
+        productLink.click();
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='size-pop-up hidden-mobile']//a[.='S']")));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@id='pd_add_to_cart']")));
+
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Sweatshirt/6674752/3304532");
 
     }
 
@@ -55,21 +58,26 @@ public class Test_1 {
     public void addToCart() {
         WebElement selectSize = driver.findElement(By.xpath("//div[@class='size-pop-up hidden-mobile']//a[.='S']"));
         selectSize.click();
-        WebElement addToCartButton = driver.findElement(By.cssSelector("#pd_add_to_cart"));
+        try {
+            WebElement closeCookiePopup = driver.findElement(By.xpath("//*[@id=\"cookieseal-banner\"]/div/button[2]"));
+            closeCookiePopup.click();
+        } catch (Exception e) {
+        }
+        WebElement addToCartButton = driver.findElement(By.xpath("//a[@id='pd_add_to_cart']"));
         addToCartButton.click();
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.urlToBe("https://www.lcwaikiki.com/tr-TR/TR/urun/outlet/Markalar/kadin/Tayt/5640361/2261621"));
+        WebDriverWait wait = new WebDriverWait(driver, 100);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[.='Sepetim']")));
 
-        Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/urun/outlet/Markalar/kadin/Tayt/5640361/2261621");
+        Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/urun/LC-WAIKIKI/kadin/Sweatshirt/6674752/3304532");
     }
 
     @Test(priority = 5)
     public void goToCartPage() {
          WebElement cartLink = driver.findElement(By.xpath("//span[.='Sepetim']"));
          cartLink.click();
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebDriverWait wait = new WebDriverWait(driver, 100);
         wait.until(ExpectedConditions.urlToBe("https://www.lcwaikiki.com/tr-TR/TR/sepetim"));
+
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR/sepetim");
     }
 
@@ -85,12 +93,10 @@ public class Test_1 {
         Assert.assertEquals(driver.getCurrentUrl(), "https://www.lcwaikiki.com/tr-TR/TR");
     }
 
-
-
-    @AfterTest
+   @AfterTest
     public void tearDown() {
-        if (driver != null) {
-            driver.quit();
+      if (driver != null) {
+          driver.quit();
         }
     }
 }
